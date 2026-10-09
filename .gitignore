@@ -1,0 +1,11 @@
+# macOS
+.DS_Store
+
+# Python
+__pycache__/
+*.pyc
+
+# 批次产物（不入库）
+/tmp/
+*-records/
+*.log
