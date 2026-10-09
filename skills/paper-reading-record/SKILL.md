@@ -195,13 +195,16 @@ Markdown 正文全部交付后，作为收尾步骤产出一页手绘风 PNG，�
 
 ## 输入源与输出去向
 
-**输入源（阶段 1 的三种形态，单篇与批量通用）：**
+**输入源（阶段 1 的四种形态，单篇与批量通用）：**
 
 | 输入源 | 识别方式 | 全文获取 | 图片获取 |
 |---|---|---|---|
 | arXiv 论文（默认） | `--ids 2610.09934` 或链接里的 id | 抓 HTML 剥离成 TXT | HTML 里 img/graphic/object 引用，`download_figures.py` 下载 |
+| HuggingFace 论文页 | `--ids hf:2610.08699`（或完整 `https://huggingface.co/papers/...` 链接；清单里 `source: hf:xxxx`） | HF API（`/api/papers/<id>`）取元信息并入 meta.json（标题/upvotes/github 仓库/星数/项目页/摘要/作者/组织），全文仍从 arXiv 抓——HF 页面本身不含全文 | 同 arXiv 路径 |
 | 本地 PDF | `--ids p01=/path/x.pdf --local` 或清单 `pdf:/path/x.pdf` | `pypdf` 逐页抽文本（需 `pip3 install pypdf`） | 无 HTML，直接走 `pypdf` `page.images` 提取（见「降级规则」） |
 | 本地 markdown | `--ids p01=/path/x.md --local` 或清单 `md:/path/x.md` | 剥 md 标记成 TXT | 沿用 md 里的本地图片路径（相对该 md 所在目录） |
+
+HF 域名直连失败时脚本自动探测系统代理（macOS `scutil --proxy`、Linux 环境变量与常见本地端口）重试；HF 元信息拿不到只降级提示、不阻塞 arXiv 流程。HF 的 upvotes/星数是社区热度，写进记录时标注为关注度证据而非效果证据。
 
 批量清单（`--from-md`）格式：
 
@@ -211,10 +214,13 @@ Markdown 正文全部交付后，作为收尾步骤产出一页手绘风 PNG，�
 - source: https://arxiv.org/abs/2610.09934
 - note: 评注文字（进 meta.intro，汇总表用）
 
-## p02 内部 PDF 材料
+## p02 HF 热门论文
+- source: hf:2610.08699
+
+## p03 内部 PDF 材料
 - source: pdf:/Users/you/papers/x.pdf
 
-## p03 已整理笔记
+## p04 已整理笔记
 - source: md:/Users/you/notes/y.md
 ```
 
